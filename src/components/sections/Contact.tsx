@@ -106,10 +106,14 @@ export function Contact() {
                     name="contact" 
                     method="POST" 
                     data-netlify="true" 
+                    data-netlify-honeypot="bot-field"
                     onSubmit={handleSubmit} 
                     className="space-y-8"
                   >
                     <input type="hidden" name="form-name" value="contact" />
+                    <p className="hidden">
+                      <label>Don’t fill this out if you’re human: <input name="bot-field" /></label>
+                    </p>
                     
                     <div className="space-y-4">
                       <label className="text-[10px] uppercase tracking-[0.2em] font-black text-white block">Identity Name</label>
