@@ -9,15 +9,26 @@ export function Contact() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSubmitted(true);
-    }, 1500);
+    const formData = new FormData(e.currentTarget);
+    
+    fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams(formData as any).toString(),
+    })
+      .then(() => {
+        setIsSubmitting(false);
+        setIsSubmitted(true);
+      })
+      .catch((error) => {
+        setIsSubmitting(false);
+        alert("Submission failed. Please try again.");
+        console.error(error);
+      });
   };
 
   return (
@@ -91,20 +102,40 @@ export function Contact() {
                     <p className="text-gray-500 text-sm italic">Our partners will contact you within 12 standard business hours.</p>
                   </div>
 
-                  <form onSubmit={handleSubmit} className="space-y-8">
+                  <form 
+                    name="contact" 
+                    method="POST" 
+                    data-netlify="true" 
+                    onSubmit={handleSubmit} 
+                    className="space-y-8"
+                  >
+                    <input type="hidden" name="form-name" value="contact" />
+                    
                     <div className="space-y-4">
                       <label className="text-[10px] uppercase tracking-[0.2em] font-black text-white block">Identity Name</label>
-                      <Input required placeholder="E.g. Alexander Hamilton" className="h-16 rounded-none bg-white/5 border-none border-b-2 border-white/10 focus:border-brand-yellow focus:ring-0 text-white placeholder:text-gray-600 font-bold" />
+                      <Input 
+                        name="name"
+                        required 
+                        placeholder="E.g. Alexander Hamilton" 
+                        className="h-16 rounded-none bg-white/5 border-none border-b-2 border-white/10 focus:border-brand-yellow focus:ring-0 text-white placeholder:text-gray-600 font-bold" 
+                      />
                     </div>
 
                     <div className="space-y-4">
                       <label className="text-[10px] uppercase tracking-[0.2em] font-black text-white block">Contact Endpoint</label>
-                      <Input required placeholder="Email Address" type="email" className="h-16 rounded-none bg-white/5 border-none border-b-2 border-white/10 focus:border-brand-yellow focus:ring-0 text-white placeholder:text-gray-600 font-bold" />
+                      <Input 
+                        name="email"
+                        required 
+                        placeholder="Email Address" 
+                        type="email" 
+                        className="h-16 rounded-none bg-white/5 border-none border-b-2 border-white/10 focus:border-brand-yellow focus:ring-0 text-white placeholder:text-gray-600 font-bold" 
+                      />
                     </div>
 
                     <div className="space-y-4">
                       <label className="text-[10px] uppercase tracking-[0.2em] font-black text-white block">Structural Inquiry</label>
                       <Textarea
+                        name="message"
                         required
                         placeholder="Describe your architectural / engineering requirements..."
                         className="min-h-[120px] rounded-none bg-white/5 border-none border-b-2 border-white/10 focus:border-brand-yellow focus:ring-0 pt-6 text-white placeholder:text-gray-600 font-bold"
