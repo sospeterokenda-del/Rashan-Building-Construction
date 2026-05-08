@@ -1,10 +1,25 @@
-import { motion } from "motion/react";
-import { Mail, Phone, MapPin, Send, MessageSquare } from "lucide-react";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { Mail, Phone, MapPin, Send, MessageSquare, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 export function Contact() {
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    // Simulate API call
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setIsSubmitted(true);
+    }, 1500);
+  };
+
   return (
     <section id="contact" className="py-32 bg-brand-dark relative overflow-hidden">
       {/* Background Dot Pattern */}
@@ -63,34 +78,73 @@ export function Contact() {
             transition={{ duration: 0.6 }}
             className="bg-white/5 p-12 md:p-16 border-l-8 border-brand-yellow border-t border-r border-b border-white/5 shadow-2xl"
           >
-            <div className="mb-12">
-              <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-2">Request Briefing</h3>
-              <p className="text-gray-500 text-sm italic">Our partners will contact you within 12 standard business hours.</p>
-            </div>
+            <AnimatePresence mode="wait">
+              {!isSubmitted ? (
+                <motion.div
+                  key="form"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <div className="mb-12">
+                    <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-2">Request Briefing</h3>
+                    <p className="text-gray-500 text-sm italic">Our partners will contact you within 12 standard business hours.</p>
+                  </div>
 
-            <form className="space-y-8">
-              <div className="space-y-4">
-                <label className="text-[10px] uppercase tracking-[0.2em] font-black text-white block">Identity Name</label>
-                <Input placeholder="E.g. Alexander Hamilton" className="h-16 rounded-none bg-white/5 border-none border-b-2 border-white/10 focus:border-brand-yellow focus:ring-0 text-white placeholder:text-gray-600 font-bold" />
-              </div>
+                  <form onSubmit={handleSubmit} className="space-y-8">
+                    <div className="space-y-4">
+                      <label className="text-[10px] uppercase tracking-[0.2em] font-black text-white block">Identity Name</label>
+                      <Input required placeholder="E.g. Alexander Hamilton" className="h-16 rounded-none bg-white/5 border-none border-b-2 border-white/10 focus:border-brand-yellow focus:ring-0 text-white placeholder:text-gray-600 font-bold" />
+                    </div>
 
-              <div className="space-y-4">
-                <label className="text-[10px] uppercase tracking-[0.2em] font-black text-white block">Contact Endpoint</label>
-                <Input placeholder="Email Address" type="email" className="h-16 rounded-none bg-white/5 border-none border-b-2 border-white/10 focus:border-brand-yellow focus:ring-0 text-white placeholder:text-gray-600 font-bold" />
-              </div>
+                    <div className="space-y-4">
+                      <label className="text-[10px] uppercase tracking-[0.2em] font-black text-white block">Contact Endpoint</label>
+                      <Input required placeholder="Email Address" type="email" className="h-16 rounded-none bg-white/5 border-none border-b-2 border-white/10 focus:border-brand-yellow focus:ring-0 text-white placeholder:text-gray-600 font-bold" />
+                    </div>
 
-              <div className="space-y-4">
-                <label className="text-[10px] uppercase tracking-[0.2em] font-black text-white block">Structural Inquiry</label>
-                <Textarea
-                  placeholder="Describe your architectural / engineering requirements..."
-                  className="min-h-[120px] rounded-none bg-white/5 border-none border-b-2 border-white/10 focus:border-brand-yellow focus:ring-0 pt-6 text-white placeholder:text-gray-600 font-bold"
-                />
-              </div>
+                    <div className="space-y-4">
+                      <label className="text-[10px] uppercase tracking-[0.2em] font-black text-white block">Structural Inquiry</label>
+                      <Textarea
+                        required
+                        placeholder="Describe your architectural / engineering requirements..."
+                        className="min-h-[120px] rounded-none bg-white/5 border-none border-b-2 border-white/10 focus:border-brand-yellow focus:ring-0 pt-6 text-white placeholder:text-gray-600 font-bold"
+                      />
+                    </div>
 
-              <Button size="lg" className="w-full h-16 rounded-none bg-brand-yellow hover:bg-white text-black text-[11px] uppercase tracking-widest font-black transition-all">
-                Submit Consultation Request
-              </Button>
-            </form>
+                    <Button 
+                      type="submit"
+                      disabled={isSubmitting}
+                      size="lg" 
+                      className="w-full h-16 rounded-none bg-green-600 hover:bg-green-500 text-white text-[11px] uppercase tracking-widest font-black transition-all disabled:opacity-50"
+                    >
+                      {isSubmitting ? "Processing Briefing..." : "Submit Consultation Request"}
+                    </Button>
+                  </form>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="success"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="flex flex-col items-center justify-center py-20 text-center"
+                >
+                  <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mb-8">
+                    <CheckCircle2 className="text-white size-10" />
+                  </div>
+                  <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-4">Briefing Transmitted</h3>
+                  <p className="text-gray-400 text-sm max-w-xs leading-relaxed uppercase tracking-widest font-bold">
+                    Your parameters have been logged. An engineering lead will reach out shortly.
+                  </p>
+                  <Button 
+                    onClick={() => setIsSubmitted(false)}
+                    variant="link" 
+                    className="mt-12 text-brand-yellow uppercase tracking-widest text-[10px] font-black hover:text-white"
+                  >
+                    Send another briefing
+                  </Button>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
         </div>
       </div>

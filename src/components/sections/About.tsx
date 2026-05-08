@@ -21,7 +21,7 @@ export function About() {
               </span>
             </div>
             <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter text-white mb-8 leading-none">
-              We Build The <span className="text-brand-yellow">Future</span> That Lasts.
+              We Build The <span className="text-brand-yellow">Structures</span> That Last.
             </h2>
             <p className="text-gray-400 text-lg leading-relaxed mb-10 max-w-xl">
               Founded on the principles of integrity and high-quality workmanship, Rashan Building Construction has grown into one of the most respected names in the construction industry.

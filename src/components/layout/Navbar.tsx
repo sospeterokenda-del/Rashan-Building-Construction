@@ -72,28 +72,28 @@ export function Navbar() {
           onClick={() => setIsOpen(!isOpen)}
         >
           {isOpen ? (
-            <X className={cn("size-6", (scrolled || isOpen) ? "text-slate-900" : "text-white")} />
+            <X className="size-6 text-white" />
           ) : (
-            <Menu className={cn("size-6", scrolled ? "text-slate-900" : "text-white")} />
+            <Menu className="size-6 text-white" />
           )}
         </button>
       </div>
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-white border-b shadow-xl animate-in slide-in-from-top duration-300">
-          <div className="flex flex-col p-6 gap-4">
+        <div className="md:hidden absolute top-full left-0 right-0 bg-brand-dark border-b border-white/10 shadow-xl animate-in slide-in-from-top duration-300">
+          <div className="flex flex-col p-6 gap-6">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
-                className="text-lg font-medium text-slate-900 hover:text-orange-600 transition-colors"
+                className="text-[10px] uppercase tracking-[0.2em] font-bold text-gray-400 hover:text-brand-yellow transition-colors"
                 onClick={() => setIsOpen(false)}
               >
                 {link.name}
               </a>
             ))}
-            <Button className="bg-orange-600 hover:bg-orange-700 text-white w-full gap-2">
+            <Button className="bg-brand-yellow hover:bg-white text-black w-full gap-2 rounded-none h-12 text-[10px] uppercase tracking-widest font-black transition-all">
               <Phone className="size-4" />
               Call Us Now
             </Button>
